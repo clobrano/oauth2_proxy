@@ -28,13 +28,18 @@ func testGitHubProvider(hostname string) *GitHubProvider {
 }
 
 func testGitHubBackend(payload string) *httptest.Server {
-	path := "/user/emails"
-	query := ""
+	pathToQueryMap := map[string]string{
+		"/user":        "",
+		"/user/emails": "",
+	}
 
 	return httptest.NewServer(http.HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {
 			url := r.URL
-			if url.Path != path || url.RawQuery != query {
+			query, ok := pathToQueryMap[url.Path]
+			if !ok {
+				w.WriteHeader(404)
+			} else if url.RawQuery != query {
 				w.WriteHeader(404)
 			} else {
 				w.WriteHeader(200)
@@ -125,4 +130,17 @@ func TestGitHubProviderGetEmailAddressEmailNotPresentInPayload(t *testing.T) {
 	email, err := p.GetEmailAddress(session)
 	assert.NotEqual(t, nil, err)
 	assert.Equal(t, "", email)
+}
+
+func TestGitHubProviderGetUserName(t *testing.T) {
+	b := testGitHubBackend(`{"email": "michael.bland@gsa.gov", "login": "mbland"}`)
+	defer b.Close()
+
+	bURL, _ := url.Parse(b.URL)
+	p := testGitHubProvider(bURL.Host)
+
+	session := &SessionState{AccessToken: "imaginary_access_token"}
+	email, err := p.GetUserName(session)
+	assert.Equal(t, nil, err)
+	assert.Equal(t, "mbland", email)
 }
