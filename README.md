@@ -32,7 +32,6 @@ Valid providers are :
 * [GitHub](#github-auth-provider)
 * [GitLab](#gitlab-auth-provider)
 * [LinkedIn](#linkedin-auth-provider)
-* [MyUSA](#myusa-auth-provider)
 
 The provider can be selected using the `provider` configuration value.
 
@@ -99,7 +98,7 @@ The Azure AD auth provider uses `openid` as it default scope. It uses `https://g
 The GitHub auth provider supports two additional parameters to restrict authentication to Organization or Team level access. Restricting by org and team is normally accompanied with `--email-domain=*`
 
     -github-org="": restrict logins to members of this organisation
-    -github-team="": restrict logins to members of any of these teams, separated by a comma
+    -github-team="": restrict logins to members of any of these teams (slug), separated by a comma
 
 If you are using GitHub enterprise, make sure you set the following to the appropriate url:
 
@@ -128,10 +127,6 @@ For LinkedIn, the registration steps are:
    * In "OAuth 2.0 Redirect URLs", enter `https://internal.yourcompany.com/oauth2/callback`
 3. Fill in the remaining required fields and Save.
 4. Take note of the **Consumer Key / API Key** and **Consumer Secret / Secret Key**
-
-### MyUSA Auth Provider
-
-The [MyUSA](https://alpha.my.usa.gov) authentication service ([GitHub](https://github.com/18F/myusa))
 
 ### Microsoft Azure AD Provider
 
@@ -180,7 +175,7 @@ Usage of oauth2_proxy:
   -client-id string: the OAuth Client ID: ie: "123456.apps.googleusercontent.com"
   -client-secret string: the OAuth Client Secret
   -config string: path to config file
-  -cookie-domain string: an optional cookie domain to force cookies to (ie: .yourcompany.com)*
+  -cookie-domain string: an optional cookie domain to force cookies to (ie: .yourcompany.com)
   -cookie-expire duration: expire timeframe for cookie (default 168h0m0s)
   -cookie-httponly: set HttpOnly cookie flag (default true)
   -cookie-name string: the name of the cookie that the oauth_proxy creates (default "_oauth2_proxy")
@@ -192,7 +187,7 @@ Usage of oauth2_proxy:
   -email-domain value: authenticate emails with the specified domain (may be given multiple times). Use * to authenticate any email
   -footer string: custom footer string. Use "-" to disable default footer.
   -github-org string: restrict logins to members of this organisation
-  -github-team string: restrict logins to members of this team
+  -github-team string: restrict logins to members of any of these teams (slug), separated by a comma
   -google-admin-email string: the google admin to impersonate for api calls
   -google-group value: restrict logins to members of this google group (may be given multiple times).
   -google-service-account-json string: the path to the service account json credentials
